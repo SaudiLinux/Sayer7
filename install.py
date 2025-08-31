@@ -91,9 +91,16 @@ class Sayer7Installer:
     
     def install_system_dependencies(self):
         """Install system-level dependencies"""
-        print("🔧 Installing system dependencies...")
-        
         if self.system == "Linux":
+            print("🔧 Linux detected!")
+            print("💡 For Linux systems, we recommend using install.sh for better system integration:")
+            print("   sudo chmod +x install.sh")
+            print("   sudo ./install.sh")
+            print("")
+            user_input = input("Continue with basic Python installation? (y/N): ").lower()
+            if user_input != 'y':
+                print("Installation cancelled. Use ./install.sh for full installation.")
+                sys.exit(0)
             return self._install_linux_deps()
         elif self.system == "Darwin":  # macOS
             return self._install_macos_deps()

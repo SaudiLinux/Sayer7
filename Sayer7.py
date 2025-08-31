@@ -14,20 +14,20 @@ import argparse
 import sys
 import os
 import time
+import requests
 from colorama import init, Fore, Style
 
 # Import core modules
 from core.url_parser import URLAnalyzer
 from core.request_handler import RequestHandler
-from core.data_processor import DataProcessor
 from modules.search_engines import SearchEngine
-from modules.vulnerability import VulnerabilityScanner
-from modules.proxy import ProxyManager
-from modules.dns import DNSEnumerator
-from modules.ssl import SSLChecker
+from modules.vulnerability_scanner import VulnerabilityScanner
+from modules.proxy_manager import ProxyManager
+from modules.ssl_dns_scanner import SSLDNSScanner
 from modules.web_crawler import WebCrawler
-from modules.waf_detection import WAFDetector
-from utils.user_agents import UserAgentManager
+from modules.waf_detector import WAFDetector
+from modules.network_recon import NetworkRecon
+from modules.exploitation_engine import ExploitationEngine
 from utils.helpers import Logger, ConfigManager
 
 init(autoreset=True)
@@ -71,7 +71,7 @@ Examples:
         
         # Scan types
         scan_group = parser.add_argument_group('Scan Types')
-        scan_group.add_argument('--full-scan', action='store_true', help='Perform full reconnaissance scan')
+        scan_group.add_argument('--full-scan', action='store_true', help='Perform full reconnaissance scan including exploitation testing')
         scan_group.add_argument('--xss-scan', action='store_true', help='Scan for XSS vulnerabilities')
         scan_group.add_argument('--sqli-scan', action='store_true', help='Scan for SQL injection vulnerabilities')
         scan_group.add_argument('--clickjacking', action='store_true', help='Check for clickjacking vulnerability')
@@ -81,6 +81,10 @@ Examples:
         scan_group.add_argument('--ssl-check', action='store_true', help='Check SSL vulnerabilities')
         scan_group.add_argument('--waf-detect', action='store_true', help='Detect WAF/IDS/IPS protection')
         scan_group.add_argument('--web-crawl', action='store_true', help='Crawl website and extract all links')
+        scan_group.add_argument('--network-recon', action='store_true', help='Perform comprehensive network reconnaissance')
+        scan_group.add_argument('--os-detect', action='store_true', help='Detect operating system')
+        scan_group.add_argument('--service-scan', action='store_true', help='Detailed service version scanning')
+        scan_group.add_argument('--exploit-test', action='store_true', help='Test exploitation of discovered vulnerabilities')
         
         # Search engines
         search_group = parser.add_argument_group('Search Engine Options')
@@ -120,10 +124,10 @@ Examples:
         # Initialize modules
         url_analyzer = URLAnalyzer()
         vuln_scanner = VulnerabilityScanner()
-        dns_enumerator = DNSEnumerator()
-        ssl_checker = SSLChecker()
-        waf_detector = WAFDetector()
+        ssl_dns_scanner = SSLDNSScanner()
+        waf_detector = WAFDetector(requests.Session())
         web_crawler = WebCrawler()
+        network_recon = NetworkRecon()
         
         results = {}
         
@@ -131,25 +135,51 @@ Examples:
         print(f"{Fore.YELLOW}[*] Analyzing URL structure...{Style.RESET_ALL}")
         results['url_analysis'] = url_analyzer.analyze(target)
         
-        # DNS Enumeration
-        print(f"{Fore.YELLOW}[*] Performing DNS enumeration...{Style.RESET_ALL}")
-        results['dns_info'] = dns_enumerator.enumerate(target)
-        
-        # SSL Check
-        print(f"{Fore.YELLOW}[*] Checking SSL vulnerabilities...{Style.RESET_ALL}")
-        results['ssl_vulns'] = ssl_checker.check(target)
+        # SSL and DNS Check
+        print(f"{Fore.YELLOW}[*] Checking SSL and DNS vulnerabilities...{Style.RESET_ALL}")
+        hostname = target.replace('https://', '').replace('http://', '').split('/')[0]
+        results['ssl_dns_info'] = ssl_dns_scanner.scan_ssl_vulnerabilities(hostname)
         
         # WAF Detection
         print(f"{Fore.YELLOW}[*] Detecting WAF/IDS protection...{Style.RESET_ALL}")
-        results['waf_detection'] = waf_detector.detect(target)
+        results['waf_detection'] = waf_detector.detect_waf(target)
         
         # Web Crawling
         print(f"{Fore.YELLOW}[*] Crawling website for links...{Style.RESET_ALL}")
-        results['crawled_links'] = web_crawler.crawl(target)
+        results['crawled_links'] = web_crawler.recursive_crawl(target)
+        
+        # Network Reconnaissance
+        print(f"{Fore.YELLOW}[*] Performing comprehensive network reconnaissance...{Style.RESET_ALL}")
+        results['network_recon'] = network_recon.network_discovery(hostname)
         
         # Vulnerability Scanning
         print(f"{Fore.YELLOW}[*] Scanning for vulnerabilities...{Style.RESET_ALL}")
-        results['vulnerabilities'] = vuln_scanner.scan(target)
+        vulnerabilities = {}
+        vulnerabilities['xss'] = vuln_scanner.scan_xss(target)
+        vulnerabilities['sqli'] = vuln_scanner.scan_sqli(target)
+        vulnerabilities['clickjacking'] = vuln_scanner.scan_clickjacking(target)
+        vulnerabilities['admin_panels'] = vuln_scanner.scan_admin_panels(target)
+        results['vulnerabilities'] = vulnerabilities
+        
+        # Exploitation Testing
+        print(f"{Fore.YELLOW}[*] Testing exploitation of discovered vulnerabilities...{Style.RESET_ALL}")
+        exploitation_engine = ExploitationEngine(target)
+        
+        # Prepare vulnerability data for exploitation
+        vuln_data = []
+        for vuln_type, vuln_results in vulnerabilities.items():
+            if vuln_results:
+                for vuln in vuln_results:
+                    vuln_data.append({
+                        'type': vuln_type,
+                        'name': vuln.get('parameter', 'unknown'),
+                        'url': vuln.get('url', target)
+                    })
+        
+        if vuln_data:
+            results['exploitation_test'] = exploitation_engine.run_comprehensive_exploitation(vuln_data)
+        else:
+            results['exploitation_test'] = {'message': 'No vulnerabilities found for exploitation testing'}
         
         return results
     
@@ -164,25 +194,56 @@ Examples:
             return scanner.scan_sqli(target)
         elif scan_type == 'clickjacking':
             scanner = VulnerabilityScanner()
-            return scanner.check_clickjacking(target)
+            return scanner.scan_clickjacking(target)
         elif scan_type == 'port_scan':
             scanner = VulnerabilityScanner()
-            return scanner.port_scan(target)
+            return scanner.scan_ports(target)
         elif scan_type == 'admin_panel':
             scanner = VulnerabilityScanner()
-            return scanner.find_admin_panels(target)
-        elif scan_type == 'dns_enum':
-            enumerator = DNSEnumerator()
-            return enumerator.enumerate(target)
-        elif scan_type == 'ssl_check':
-            checker = SSLChecker()
-            return checker.check(target)
+            return scanner.scan_admin_panels(target)
+        elif scan_type == 'dns_enum' or scan_type == 'ssl_check':
+            scanner = SSLDNSScanner()
+            hostname = target.replace('https://', '').replace('http://', '').split('/')[0]
+            return scanner.scan_ssl_vulnerabilities(hostname)
         elif scan_type == 'waf_detect':
-            detector = WAFDetector()
-            return detector.detect(target)
+            detector = WAFDetector(requests.Session())
+            return detector.detect_waf(target)
         elif scan_type == 'web_crawl':
             crawler = WebCrawler()
-            return crawler.crawl(target)
+            return crawler.recursive_crawl(target)
+        elif scan_type == 'network_recon':
+            network_recon = NetworkRecon()
+            hostname = target.replace('https://', '').replace('http://', '').split('/')[0]
+            return network_recon.network_discovery(hostname)
+        elif scan_type == 'os_detect':
+            network_recon = NetworkRecon()
+            hostname = target.replace('https://', '').replace('http://', '').split('/')[0]
+            return network_recon.os_detection(hostname)
+        elif scan_type == 'service_scan':
+            network_recon = NetworkRecon()
+            hostname = target.replace('https://', '').replace('http://', '').split('/')[0]
+            return network_recon.nmap_scan(hostname, 'comprehensive')
+        elif scan_type == 'exploit_test':
+            exploitation_engine = ExploitationEngine(target)
+            # First run vulnerability scan to get vulnerabilities
+            vuln_scanner = VulnerabilityScanner()
+            vulnerabilities = []
+            
+            # Scan for various vulnerabilities
+            xss_results = vuln_scanner.scan_xss(target)
+            sqli_results = vuln_scanner.scan_sqli(target)
+            
+            # Convert results to exploitation format
+            for vuln_type, results in [('xss', xss_results), ('sqli', sqli_results)]:
+                if results:
+                    for result in results:
+                        vulnerabilities.append({
+                            'type': vuln_type,
+                            'name': result.get('parameter', 'unknown'),
+                            'url': result.get('url', target)
+                        })
+            
+            return exploitation_engine.run_comprehensive_exploitation(vulnerabilities)
     
     def run_search(self, query, engine, pages):
         print(f"{Fore.GREEN}[+] Searching for: {query} using {engine}{Style.RESET_ALL}")
@@ -248,6 +309,14 @@ Examples:
                 results = self.run_specific_scan(target, 'waf_detect')
             elif args.web_crawl:
                 results = self.run_specific_scan(target, 'web_crawl')
+            elif args.network_recon:
+                results = self.run_specific_scan(target, 'network_recon')
+            elif args.os_detect:
+                results = self.run_specific_scan(target, 'os_detect')
+            elif args.service_scan:
+                results = self.run_specific_scan(target, 'service_scan')
+            elif args.exploit_test:
+                results = self.run_specific_scan(target, 'exploit_test')
             elif args.query:
                 results = self.run_search(args.query, args.search_engine, args.pages)
             
