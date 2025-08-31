@@ -28,6 +28,7 @@ from modules.web_crawler import WebCrawler
 from modules.waf_detector import WAFDetector
 from modules.network_recon import NetworkRecon
 from modules.exploitation_engine import ExploitationEngine
+from modules.attack_surface_manager import AttackSurfaceManager, AttackSurfaceVisualizer
 from utils.helpers import Logger, ConfigManager
 
 init(autoreset=True)
@@ -85,7 +86,9 @@ Examples:
         scan_group.add_argument('--os-detect', action='store_true', help='Detect operating system')
         scan_group.add_argument('--service-scan', action='store_true', help='Detailed service version scanning')
         scan_group.add_argument('--exploit-test', action='store_true', help='Test exploitation of discovered vulnerabilities')
-        
+        scan_group.add_argument('--attack-surface', action='store_true', help='Discover and analyze attack surface')
+        scan_group.add_argument('--continuous-monitoring', action='store_true', help='Enable continuous attack surface monitoring')
+
         # Search engines
         search_group = parser.add_argument_group('Search Engine Options')
         search_group.add_argument('--search-engine', choices=['google', 'duckduckgo', 'bing', 'aol'], 
@@ -317,6 +320,39 @@ Examples:
                 results = self.run_specific_scan(target, 'service_scan')
             elif args.exploit_test:
                 results = self.run_specific_scan(target, 'exploit_test')
+            elif args.attack_surface:
+                print(f"{Fore.GREEN}[+] Starting attack surface discovery on: {target}{Style.RESET_ALL}")
+                attack_manager = AttackSurfaceManager(target)
+                
+                # Discover attack surface
+                results = attack_manager.discover_attack_surface()
+                
+                # Generate visual report
+                visualizer = AttackSurfaceVisualizer()
+                network_map = visualizer.generate_network_map(results)
+                
+                # Generate comprehensive report
+                report = attack_manager.generate_attack_surface_report()
+                
+                # Save results
+                timestamp = int(time.time())
+                attack_results_file = f"attack_surface_{timestamp}.json"
+                report_file = f"attack_surface_report_{timestamp}.md"
+                map_file = f"network_map_{timestamp}.mmd"
+                
+                self.save_results(results, attack_results_file, 'json')
+                
+                with open(report_file, 'w', encoding='utf-8') as f:
+                    f.write(report)
+                print(f"{Fore.GREEN}[+] Attack surface report saved to: {report_file}{Style.RESET_ALL}")
+                
+                with open(map_file, 'w') as f:
+                    f.write(network_map)
+                print(f"{Fore.GREEN}[+] Network map saved to: {map_file}{Style.RESET_ALL}")
+                
+                if args.continuous_monitoring:
+                    print(f"{Fore.YELLOW}[*] Starting continuous monitoring...{Style.RESET_ALL}")
+                    attack_manager.continuous_monitoring(1)  # Default 1 hour interval
             elif args.query:
                 results = self.run_search(args.query, args.search_engine, args.pages)
             

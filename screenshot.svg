@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="700" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="700" fill="#1e1e1e"/>
+  
+  <!-- Terminal Window -->
+  <rect x="50" y="50" width="1100" height="600" rx="10" fill="#0c0c0c" stroke="#00ff00" stroke-width="2"/>
+  
+  <!-- Terminal Header -->
+  <rect x="50" y="50" width="1100" height="40" rx="10" fill="#2d2d2d"/>
+  <circle cx="80" cy="70" r="8" fill="#ff5f56"/>
+  <circle cx="105" cy="70" r="8" fill="#ffbd2e"/>
+  <circle cx="130" cy="70" r="8" fill="#27ca3f"/>
+  <text x="575" y="75" font-family="Consolas, monospace" font-size="14" fill="#ffffff" text-anchor="middle">Sayer7 - Terminal</text>
+  
+  <!-- Terminal Content -->
+  <text x="70" y="110" font-family="Consolas, monospace" font-size="14" fill="#00ff00">user@linux:~$ sayer7 --help</text>
+  <text x="70" y="130" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Sayer7 - Advanced Web Reconnaissance Tool</text>
+  <text x="70" y="150" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Version 1.0.0 | Author: SayerLinux</text>
+  
+  <text x="70" y="180" font-family="Consolas, monospace" font-size="12" fill="#00ffff">Usage:</text>
+  <text x="90" y="200" font-family="Consolas, monospace" font-size="12" fill="#ffffff">sayer7 -u &lt;URL&gt; [OPTIONS]</text>
+  
+  <text x="70" y="220" font-family="Consolas, monospace" font-size="12" fill="#00ffff">Options:</text>
+  <text x="90" y="240" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--full-scan          Run comprehensive scan</text>
+  <text x="90" y="260" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--xss               Test XSS vulnerabilities</text>
+  <text x="90" y="280" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--sqli              Test SQL injection</text>
+  <text x="90" y="300" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--exploit-test      Test exploitation</text>
+  <text x="90" y="320" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--waf-detect        Detect WAF/IPS</text>
+  <text x="90" y="340" font-family="Consolas, monospace" font-size="12" fill="#ffffff">--network-recon     Network reconnaissance</text>
+  
+  <text x="70" y="370" font-family="Consolas, monospace" font-size="12" fill="#00ff00">user@linux:~$ sayer7 -u https://example.com --full-scan</text>
+  
+  <!-- Scan Progress -->
+  <text x="70" y="400" font-family="Consolas, monospace" font-size="12" fill="#ffff00">[+] Starting full scan...</text>
+  <text x="70" y="420" font-family="Consolas, monospace" font-size="12" fill="#ffffff">[✓] URL Analysis: https://example.com</text>
+  <text x="70" y="440" font-family="Consolas, monospace" font-size="12" fill="#ffffff">[✓] SSL/DNS Check: Completed</text>
+  <text x="70" y="460" font-family="Consolas, monospace" font-size="12" fill="#ffffff">[✓] WAF Detection: No WAF detected</text>
+  <text x="70" y="480" font-family="Consolas, monospace" font-size="12" fill="#ffffff">[✓] Web Crawling: 127 pages found</text>
+  <text x="70" y="500" font-family="Consolas, monospace" font-size="12" fill="#ffffff">[✓] Vulnerability Scan: 3 issues found</text>
+  <text x="70" y="520" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[✓] Exploitation Test: 1 exploitable</text>
+  
+  <!-- Results -->
+  <text x="70" y="550" font-family="Consolas, monospace" font-size="12" fill="#00ffff">Scan Results:</text>
+  <text x="90" y="570" font-family="Consolas, monospace" font-size="12" fill="#ff6b6b">⚠️  High: SQL Injection in login form</text>
+  <text x="90" y="590" font-family="Consolas, monospace" font-size="12" fill="#ffa726">⚠️  Medium: XSS in search parameter</text>
+  <text x="90" y="610" font-family="Consolas, monospace" font-size="12" fill="#66bb6a">⚠️  Low: Missing security headers</text>
+  
+  <text x="70" y="640" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[+] Report saved: output/Sayer7_report_20250831.html</text>
+  
+  <!-- Logo -->
+  <text x="900" y="100" font-family="Consolas, monospace" font-size="20" fill="#00ff00" font-weight="bold">Sayer7</text>
+  <text x="900" y="120" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Advanced Web</text>
+  <text x="900" y="135" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Reconnaissance</text>
+  <text x="900" y="150" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Tool</text>
+  
+  <!-- Features Icons -->
+  <rect x="900" y="180" width="15" height="15" fill="#00ff00" opacity="0.8"/>
+  <text x="920" y="192" font-family="Consolas, monospace" font-size="10" fill="#ffffff">XSS Testing</text>
+  
+  <rect x="900" y="200" width="15" height="15" fill="#00ff00" opacity="0.8"/>
+  <text x="920" y="212" font-family="Consolas, monospace" font-size="10" fill="#ffffff">SQLi Detection</text>
+  
+  <rect x="900" y="220" width="15" height="15" fill="#00ff00" opacity="0.8"/>
+  <text x="920" y="232" font-family="Consolas, monospace" font-size="10" fill="#ffffff">Metasploit</text>
+  
+  <rect x="900" y="240" width="15" height="15" fill="#00ff00" opacity="0.8"/>
+  <text x="920" y="252" font-family="Consolas, monospace" font-size="10" fill="#ffffff">WAF Bypass</text>
+</svg>

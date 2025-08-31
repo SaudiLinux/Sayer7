@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#1e1e1e"/>
+  
+  <!-- Terminal Window -->
+  <rect x="50" y="50" width="1100" height="700" rx="10" fill="#0c0c0c" stroke="#00ff00" stroke-width="2"/>
+  
+  <!-- Terminal Header -->
+  <rect x="50" y="50" width="1100" height="40" rx="10" fill="#2d2d2d"/>
+  <circle cx="80" cy="70" r="8" fill="#ff5f56"/>
+  <circle cx="105" cy="70" r="8" fill="#ffbd2e"/>
+  <circle cx="130" cy="70" r="8" fill="#27ca3f"/>
+  <text x="575" y="75" font-family="Consolas, monospace" font-size="14" fill="#ffffff" text-anchor="middle">Sayer7 Installation</text>
+  
+  <!-- Installation Process -->
+  <text x="70" y="110" font-family="Consolas, monospace" font-size="14" fill="#00ff00">user@linux:~/Sayer7$ sudo ./install.sh</text>
+  
+  <text x="70" y="140" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Starting Sayer7 installation...</text>
+  <text x="70" y="160" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Detected OS: ubuntu 22.04</text>
+  
+  <text x="70" y="190" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Installing system dependencies...</text>
+  <text x="90" y="210" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3 amd64 3.10.4-0ubuntu2 [47.8 kB]</text>
+  <text x="90" y="230" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 nmap amd64 7.80+dfsg1-3build1 [5,124 kB]</text>
+  <text x="90" y="250" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Get:3 http://archive.ubuntu.com/ubuntu jammy/universe amd64 sqlmap all 1.5.12-0kali1 [4,567 kB]</text>
+  <text x="90" y="270" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Get:4 http://archive.ubuntu.com/ubuntu jammy/main amd64 metasploit-framework amd64 6.1.27+20220209113731.git.2b603f7~1rapid7-1 [210 MB]</text>
+  
+  <text x="70" y="300" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[SUCCESS] System dependencies installed</text>
+  
+  <text x="70" y="330" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Setting up directories...</text>
+  <text x="70" y="350" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[SUCCESS] Directories created</text>
+  
+  <text x="70" y="380" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Creating virtual environment...</text>
+  <text x="90" y="400" font-family="Consolas, monospace" font-size="12" fill="#ffffff">created virtual environment CPython3.10.4.final.0-64 in 234ms</text>
+  <text x="90" y="420" font-family="Consolas, monospace" font-size="12" fill="#ffffff">creator CPython3Posix(dest=/opt/sayer7/venv, clear=False, no_vcs_ignore=False, global=False)</text>
+  
+  <text x="70" y="450" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Installing Python dependencies...</text>
+  <text x="90" y="470" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Collecting requests==2.28.1</text>
+  <text x="90" y="490" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Collecting beautifulsoup4==4.11.1</text>
+  <text x="90" y="510" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Collecting selenium==4.4.3</text>
+  <text x="90" y="530" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Successfully installed 15 packages</text>
+  
+  <text x="70" y="560" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[SUCCESS] Dependencies installed successfully</text>
+  
+  <text x="70" y="590" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Creating symbolic link...</text>
+  <text x="70" y="610" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[SUCCESS] Symbolic link created: /usr/local/bin/sayer7</text>
+  
+  <text x="70" y="640" font-family="Consolas, monospace" font-size="12" fill="#00ffff">[INFO] Verifying installation...</text>
+  <text x="70" y="660" font-family="Consolas, monospace" font-size="12" fill="#00ff00">[SUCCESS] Installation verified successfully</text>
+  
+  <!-- Installation Complete Banner -->
+  <rect x="300" y="690" width="600" height="50" rx="5" fill="#00ff00" opacity="0.2"/>
+  <text x="600" y="720" font-family="Consolas, monospace" font-size="16" fill="#00ff00" text-anchor="middle" font-weight="bold">=== Sayer7 Installation Complete ===</text>
+  
+  <!-- Quick Usage -->
+  <text x="70" y="750" font-family="Consolas, monospace" font-size="12" fill="#ffffff">Usage: sayer7 -u https://example.com --full-scan</text>
+</svg>
