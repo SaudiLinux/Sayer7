@@ -46,6 +46,78 @@ class Logger:
     def debug(self, message: str):
         """Log debug message"""
         self.logger.debug(message)
+    
+    def save_results(self, results: Dict[str, Any], filename: str = None, output_format: str = 'json') -> bool:
+        """Save scan results to file"""
+        try:
+            output_dir = "output"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            
+            if not filename:
+                filename = f"sayer7_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            
+            # Ensure filename doesn't include path separators
+            filename = os.path.basename(filename)
+            
+            # Remove extension if already provided
+            if filename.endswith(('.json', '.csv', '.txt')):
+                filename = filename.rsplit('.', 1)[0]
+            
+            filepath = os.path.join(output_dir, f"{filename}.{output_format.lower()}")
+            
+            if output_format.lower() == 'json':
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    json.dump(results, f, indent=4, ensure_ascii=False)
+            elif output_format.lower() == 'csv':
+                import csv
+                with open(filepath, 'w', newline='', encoding='utf-8') as f:
+                    writer = csv.writer(f)
+                    self._flatten_results_for_csv(results, writer)
+            elif output_format.lower() == 'txt':
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    self._format_results_for_txt(results, f)
+            else:
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    json.dump(results, f, indent=4, ensure_ascii=False)
+            
+            self.logger.info(f"Results saved to: {filepath}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error saving results: {e}")
+            return False
+    
+    def _flatten_results_for_csv(self, results: Dict[str, Any], writer):
+        """Flatten results for CSV format"""
+        writer.writerow(['Type', 'Key', 'Value'])
+        for key, value in results.items():
+            if isinstance(value, dict):
+                for sub_key, sub_value in value.items():
+                    writer.writerow([key, sub_key, str(sub_value)])
+            elif isinstance(value, list):
+                for item in value:
+                    writer.writerow([key, 'item', str(item)])
+            else:
+                writer.writerow([key, key, str(value)])
+    
+    def _format_results_for_txt(self, results: Dict[str, Any], f):
+        """Format results for text format"""
+        f.write("Sayer7 Scan Results\n")
+        f.write("=" * 50 + "\n")
+        f.write(f"Scan Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write("=" * 50 + "\n\n")
+        
+        for key, value in results.items():
+            f.write(f"\n[{key.upper()}]\n")
+            if isinstance(value, dict):
+                for sub_key, sub_value in value.items():
+                    f.write(f"  {sub_key}: {sub_value}\n")
+            elif isinstance(value, list):
+                for item in value:
+                    f.write(f"  - {item}\n")
+            else:
+                f.write(f"  {value}\n")
 
 
 class ConfigManager:
