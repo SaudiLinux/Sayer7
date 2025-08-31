@@ -30,22 +30,14 @@ from modules.network_recon import NetworkRecon
 from modules.exploitation_engine import ExploitationEngine
 from modules.attack_surface_manager import AttackSurfaceManager, AttackSurfaceVisualizer
 from utils.helpers import Logger, ConfigManager
+from utils.user_agents import UserAgentManager
 
 init(autoreset=True)
 
 class Sayer7:
     def __init__(self):
         self.banner = f"""
-{Fore.CYAN}  ███████╗ █████╗ ███████╗██╗  ██╗███████╗██████╗ ███████╗███████╗
-  ██╔════╝██╔══██╗██╔════╝██║  ██║██╔════╝██╔══██╗██╔════╝██╔════╝
-  ███████╗███████║███████╗███████║█████╗  ██████╔╝███████╗█████╗  
-  ╚════██║██╔══██║╚════██║██╔══██║██╔══╝  ██╔═══╝ ╚════██║██╔══╝  
-  ███████║██║  ██║███████║██║  ██║███████╗██║     ███████║███████╗
-  ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝╚══════╝
-{Style.RESET_ALL}
-{Fore.GREEN}  Advanced Web Reconnaissance Tool - Sayer7 v1.0{Style.RESET_ALL}
-  {Fore.YELLOW}Author: SayerLinux | GitHub: https://github.com/SaudiLinux{Style.RESET_ALL}
-  {Fore.YELLOW}Email: SayerLinux1@gmail.com{Style.RESET_ALL}
+{Fore.CYAN}  Sayer7{Style.RESET_ALL}
         """
         self.parser = self.setup_argparse()
         self.logger = Logger()
@@ -327,9 +319,10 @@ Examples:
                 # Discover attack surface
                 results = attack_manager.discover_attack_surface()
                 
-                # Generate visual report
-                visualizer = AttackSurfaceVisualizer()
-                network_map = visualizer.generate_network_map(results)
+                # Generate visual report with proper data
+                visualizer = AttackSurfaceVisualizer(results)
+                network_map = visualizer.generate_network_map()
+                risk_heatmap = visualizer.generate_risk_heatmap()
                 
                 # Generate comprehensive report
                 report = attack_manager.generate_attack_surface_report()
@@ -339,6 +332,7 @@ Examples:
                 attack_results_file = f"attack_surface_{timestamp}.json"
                 report_file = f"attack_surface_report_{timestamp}.md"
                 map_file = f"network_map_{timestamp}.mmd"
+                heatmap_file = f"risk_heatmap_{timestamp}.md"
                 
                 self.save_results(results, attack_results_file, 'json')
                 
@@ -346,9 +340,13 @@ Examples:
                     f.write(report)
                 print(f"{Fore.GREEN}[+] Attack surface report saved to: {report_file}{Style.RESET_ALL}")
                 
-                with open(map_file, 'w') as f:
+                with open(map_file, 'w', encoding='utf-8') as f:
                     f.write(network_map)
                 print(f"{Fore.GREEN}[+] Network map saved to: {map_file}{Style.RESET_ALL}")
+                
+                with open(heatmap_file, 'w', encoding='utf-8') as f:
+                    f.write(risk_heatmap)
+                print(f"{Fore.GREEN}[+] Risk heatmap saved to: {heatmap_file}{Style.RESET_ALL}")
                 
                 if args.continuous_monitoring:
                     print(f"{Fore.YELLOW}[*] Starting continuous monitoring...{Style.RESET_ALL}")
